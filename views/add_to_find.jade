@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h1= title
+  if (vars!==undefined)
+    each val, index in vars
+      div.ffind  #{val['id']} : #{val['name']}
