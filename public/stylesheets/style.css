@@ -2,12 +2,17 @@ body {
   padding: 0;
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #320064;
+  background-color: #2D0248;
   color: white;
 }
 
 a {
   color: #00B7FF;
+}
+
+.separator
+{
+	margin-top: 30px !important;
 }
 
 button
