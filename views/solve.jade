@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  h1 Поиск решения: #{title}
+  //- console.log("Hello");
+    //- a.button(href="mailto:harpagonzp@gmail.com", target="_blank") e-mail
+    //- a.button(href="http://vk.com/harpagon", target="_blank") VKontakte
+    //- a.button(href="http://facebook.com/harpagonzp", target="_blank") Facebook
+    //- a.button(href="http://twitter.com/harpagon1", target="_blank") twitter
+  //- form( method="POST", action="/")
+  p 
+    if (parent_razd.length>1)
+      - for (var i=0;i < parent_razd.length-1;i++)
+          a(href="/solve?razd=#{parent_razd[i]['ID']}") #{parent_razd[i]['Name']}
+          |&nbsp;\&nbsp;
+        | #{parent_razd[parent_razd.length-1]['Name']}
+    else
+      | #{parent_razd[parent_razd.length-1]['Name']}
+  if (subrazdels!==undefined)
+    each val, index in subrazdels
+      a.button(href="/solve?razd=#{val['ID']}")  #{val['Name']}
+  if (parent_razd.length > 1)
+    a( href="/solve?razd=#{parent_razd[parent_razd.length-2]['ID']}" class="button separator") Назад
+  else
+
+  a( href="/" class=(lastSeparator||(parent_razd.length == 1))?'button separator':'button') Вренуться на главную

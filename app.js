@@ -5,6 +5,7 @@
 
 var express = require('express');
 var routes = require('./routes');
+var solver = require('./routes/solve');
 var user = require('./routes/user');
 var addtofind = require('./routes/add_to_find');
 var http = require('http');
@@ -39,6 +40,7 @@ app.get('/about', routes.about);
 app.get('/contacts', routes.contacts);
 app.get('/add_to_find', addtofind.add_to_find);
 app.get('/users', user.list);
+app.get('/solve', solver.solve);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
