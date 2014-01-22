@@ -9,8 +9,12 @@ var user = require('./routes/user');
 var addtofind = require('./routes/add_to_find');
 var http = require('http');
 var path = require('path');
+var razd = require('./solver/razdels');
 
 var app = express();
+
+GLOBAL.razdels = razd.GetRazdels();//[{id:'id1',name:'name1'},{id:'id2',name:'name2'}];
+console.log(GLOBAL.razdels);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,6 +34,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.post('/', routes.index);
+app.get('/about', routes.about);
+app.get('/contacts', routes.contacts);
 app.get('/add_to_find', addtofind.add_to_find);
 app.get('/users', user.list);
 
