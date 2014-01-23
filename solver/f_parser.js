@@ -96,6 +96,12 @@ function isContainUUID(arr,uuid) {
 	return false;
 }
 
+function isConstant(v) {
+	if (v.Value !== "" && v.Value !== null && v.Value !== undefined)
+		return true;
+	return false;
+}
+
 function GetFindableVars (Formulas) {
 	var vars = [];
 	for (var i = 0; i < Formulas.length; i++) {
@@ -107,6 +113,36 @@ function GetFindableVars (Formulas) {
 	return vars;
 }
 
+function GetRelatedVars (goal_var, Formulas) {
+	console.log("GET RELATED VARS FOR '"+goal_var+"' IN "+Formulas);
+	var vars = [];
+	for (var i = 0; i < Formulas.length; i++)
+	{
+		if (Formulas[i].Goal.ID == goal_var['ID'])
+		{
+			for (var j = 0; j < Formulas[i].Variables.length; j++)
+			{
+				if (!isContainUUID(vars,Formulas[i].Variables[j].ID))
+				{
+					if (!isConstant(Formulas[i].Variables[j]))
+						vars.push(JSON.parse(JSON.stringify(Formulas[i].Variables[j])));
+					var res = GetRelatedVars(Formulas[i].Variables[j],Formulas);
+					for (var cc = 0; cc < res.length; cc++)
+					{
+						if (!isContainUUID(vars,res[cc].ID))
+						{
+							if (!isConstant(res[cc]))
+								vars.push(JSON.parse(JSON.stringify(res[cc])));
+						}
+					}
+				}
+			}
+		}
+	}
+	return vars;
+}
+
 exports.ParseFormulas = ParseFormulas;
 exports.GetFindableVars = GetFindableVars;
 exports.isContainUUID = isContainUUID;
+exports.GetRelatedVars = GetRelatedVars;
