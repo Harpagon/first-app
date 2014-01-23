@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var parser = require('./f_parser');
 
 function getFiles(dir, id){
 	var result = [];
@@ -11,52 +12,66 @@ function getFiles(dir, id){
 			ff = getFiles(name, id);
 			id = ff[1];
 			id++;
-			var dd = {ID:id, Name:files[i],isDirectory:true,Path:name,Dirs:[]};
+			var dd = {ID:id, Name:files[i],isDirectory:true,Path:name,Dirs:[],Variables:[]};
 			for(var j in ff[0])
 			{
 				dd['Dirs'].push(ff[0][j]);
 			}
 			result.push(dd);
 		}else{
-			//console.log(name);
+			////console.log(name);
 			id++;
-			result.push({ID:id,Name:files[i],isDirectory:false,Path:name, Dirs:[]});
+			result.push({ID:id,Name:files[i],isDirectory:false,Path:name, Dirs:[],Variables:[]});
 		}
 	}
 	//id++;
 	return [result,id];
 }
 
+function setFormulas(dir) {
+	for(var i in dir)
+	{
+		if (dir[i]['isDirectory'])
+		{
+			setFormulas(dir[i]['Dirs']);
+		}else
+		{
+			var text = fs.readFileSync(dir[i]['Path'],'utf8');
+			dir[i]['Variables'] = parser.ParseFormulas(text);
+		}
+	}
+}
+
 function GetRazdels() {
 	var dir = './razdels';
 	var files = getFiles(dir,0);
 	var result = [];
-	//for (var i in files)
-	//console.log(files[i]);
+	setFormulas(files[0]);
+	////console.log(files[i]);
 	return files[0];
 }
 
 function getRazdelById(id,dirs) {
 	if (dirs === undefined)
 		dirs = GLOBAL.razdels;
-	console.log("SEARCH FOR ID: "+id);
+	//console.log("SEARCH FOR ID: "+id);
 	for(var i in dirs)
 	{
-		console.log("SEARCH: "+dirs[i]['ID']+":"+dirs[i]['Name']);
+		//console.log("SEARCH: "+dirs[i]['ID']+":"+dirs[i]['Name']);
 		if (dirs[i]['ID'] == id)
 		{
-			console.log("FOUND: "+dirs[i]['ID']+":"+dirs[i]['Name']);
+			//console.log("FOUND: "+dirs[i]['ID']+":"+dirs[i]['Name']);
 			return dirs[i];
 		}
 		if (dirs[i]['isDirectory'])
 		{
-			console.log("ENTER TO SUB DIR: "+dirs[i]['ID']+":"+dirs[i]['Name']);
+			//console.log("ENTER TO SUB DIR: "+dirs[i]['ID']+":"+dirs[i]['Name']);
 			var r = getRazdelById(id,dirs[i]['Dirs']);
 			if (r != "NOT_FOUND")
 				return r;
 		}
 	}
-	console.log("NOT_FOUND_BY_ID");
+	//console.log("NOT_FOUND_BY_ID");
 	return "NOT_FOUND";
 
 }
@@ -80,7 +95,7 @@ function getParentById(id,dirs,parent) {
 				return r;
 		}
 	}
-	console.log("PARENT_NOT_FOUND");
+	//console.log("PARENT_NOT_FOUND");
 	return "NOT_FOUND";
 
 }
@@ -89,15 +104,15 @@ function getPathById(id, dirs, parent) {
 	/*result = new Array();
 	if (dirs === undefined)
 		dirs = GLOBAL.razdels;
-	console.log("SEARCHING FOR ID: "+id);
+	//console.log("SEARCHING FOR ID: "+id);
 	for(var i in dirs)
 	{
-		console.log("SEARCHING: "+dirs[i]['Name']+":"+dirs[i]['ID']);
+		//console.log("SEARCHING: "+dirs[i]['Name']+":"+dirs[i]['ID']);
 		if (dirs[i]['ID'] == id)
 		{
 			if (parent!== undefined)
 				result.push(new Object(parent));
-			console.log("FOUND: "+dirs[i]['Name']+":"+dirs[i]['ID']);
+			//console.log("FOUND: "+dirs[i]['Name']+":"+dirs[i]['ID']);
 			result.push(new Object(dirs[i]));
 			return result;
 		}
@@ -112,15 +127,15 @@ function getPathById(id, dirs, parent) {
 			var curr_path = "";
 			for(var l in result)
 				curr_path +=result[l]['Name']+"\\";
-			console.log("RET_RESULT: "+curr_path);
+			//console.log("RET_RESULT: "+curr_path);
 			return result;
 		}
 		var curr_path = "";
 		for(var l in result)
 			curr_path +=result[l]['Name']+"\\";
-		console.log("CURRENT_RESULT: "+curr_path);
+		//console.log("CURRENT_RESULT: "+curr_path);
 	}
-	console.log("PATH_NOT_FOUND");
+	//console.log("PATH_NOT_FOUND");
 	return "NOT_FOUND";*/
 	var result = [];
 	result.push(getRazdelById(id));
@@ -135,7 +150,7 @@ function getPathById(id, dirs, parent) {
 	var curr_path = "";
 	for(var l in result)
 		curr_path +=result[l]['Name']+"\\";
-	console.log("CURRENT_RESULT: "+curr_path);
+	//console.log("CURRENT_RESULT: "+curr_path);
 	return result;
 }
 

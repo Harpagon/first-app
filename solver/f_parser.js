@@ -8,13 +8,14 @@ function ParseFormulas(formulasStr) {
 	//var vars_in_formula = /"(.*?)"/gim;
 	var vars_in_formula = /"([^0-9]*?)([0-9]*?)"/gim;
 	var uuid = /@uuid@/gim;
+	var id = 1;
 
 	//Выбор переменных и создание массива
 	var vars = [];
 	var myArray = variables.execAll(formulasStr);
 	for (var i = 0; i < myArray.length; i++) {
 		//alert(v_arr[i]);
-		var vv = JSON.parse(myArray[i][0].replace(variables,"{\"Value\":\"$4\",\"Name\":\"$2\",\"Description\":\"$3\",\"ID\":\""+createUUID()+"\"}"));
+		var vv = JSON.parse(myArray[i][0].replace(variables,"{\"Value\":\"$4\",\"Name\":\"$2\",\"Description\":\"$3\",\"ID\":"+(id++)+"}"));
 		var skip = false;
 		for (var vi = 0; vi < vars.length; vi++) {
 			if (vars[vi].Name == vv.Name)
@@ -29,7 +30,7 @@ function ParseFormulas(formulasStr) {
 	Formulas = [];
 	myArray = formulas.execAll(formulasStr);
 	for (var myA = 0; myA < myArray.length; myA++) {
-		var f =  JSON.parse(myArray[myA][0].replace(formulas,"{\"Goal\":{},\"Variables\":[],\"Description\":\"$3\",\"Expression\":\"$4\",\"ID\":\""+createUUID()+"\"}"));
+		var f =  JSON.parse(myArray[myA][0].replace(formulas,"{\"Goal\":{},\"Variables\":[],\"Description\":\"$3\",\"Expression\":\"$4\",\"ID\":"+(id++)+"}"));
 		for (i = 0; i < vars.length; i++) {
 			if(vars[i].Name == myArray[myA][2])
 			{
@@ -87,4 +88,25 @@ function createUUID() {
 	return uuid;
 }
 
+function isContainUUID(arr,uuid) {
+	for (var j = 0; j < arr.length; j++) {
+			if (arr[j].ID == uuid)
+				return true;
+		}
+	return false;
+}
+
+function GetFindableVars (Formulas) {
+	var vars = [];
+	for (var i = 0; i < Formulas.length; i++) {
+		if (!isContainUUID(vars,Formulas[i].Goal.ID))
+		{
+			vars.push(Formulas[i].Goal);
+		}
+	}
+	return vars;
+}
+
 exports.ParseFormulas = ParseFormulas;
+exports.GetFindableVars = GetFindableVars;
+exports.isContainUUID = isContainUUID;

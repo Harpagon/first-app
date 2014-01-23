@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1 Поиск решения: #{title}
+  h2 Поиск решения: #{title}
   //- console.log("Hello");
     //- a.button(href="mailto:harpagonzp@gmail.com", target="_blank") e-mail
     //- a.button(href="http://vk.com/harpagon", target="_blank") VKontakte
@@ -16,11 +16,36 @@ block content
         | #{parent_razd[parent_razd.length-1]['Name']}
     else
       | #{parent_razd[parent_razd.length-1]['Name']}
+  hr
   if (subrazdels!==undefined)
     each val, index in subrazdels
-      a.button(href="/solve?razd=#{val['ID']}")  #{val['Name']}
-  if (parent_razd.length > 1)
-    a( href="/solve?razd=#{parent_razd[parent_razd.length-2]['ID']}" class="button separator") Назад
+      a.button(href="/solve?razd=#{val['ID']}")
+        span #{val['Name']}
+    if (parent_razd.length > 1)
+      br
+      a( href="/solve?razd=#{parent_razd[parent_razd.length-2]['ID']}" class="button separator")
+        span Назад
   else
-
-  a( href="/" class=(lastSeparator||(parent_razd.length == 1))?'button separator':'button') Вренуться на главную
+    - var ff_vars = "";
+    p Искомые переменные:
+    if find_vars !== undefined
+      - console.log("ID:"+find_vars);
+      each val, index in find_vars
+        - ff_vars+= '&find_vars=' + val['ID'];
+        //- var link = '<a class="to_find" href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}%href%"><span>#{val['Name']} (#{val['Description']})</span></a>';
+        - var href = '';
+        each val2, index2 in find_vars
+          if (val2['ID']!=val['ID'])
+            - href+= '&find_vars=' + val2['ID'];
+        a.to_find(href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}#{href}")
+          span #{val['Name']} (#{val['Description']})
+      p
+        span.show-hide(onclick="show_hide_find_vars();") Добавить:
+    if findable_vars !== undefined
+      div#find_vars(style=(find_vars.length > 0)?"display:none":"display:block")
+        each val, index in findable_vars
+          a.can_find(href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}#{ff_vars}&find_vars=#{val['ID']}")
+            span #{val['Name']} (#{val['Description']})
+   hr
+  a( href="/" class=(lastSeparator||(parent_razd.length == 1))?'button separator':'button')
+    span Вренуться на главную

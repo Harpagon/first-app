@@ -3,15 +3,18 @@ extends layout
 block content
   h1 Главная
   p Сделай свой выбор.
-  a.button(href="/about") Что это?
+  a.button(href="/about")
+    span Что это?
   //- form( method="POST", action="/about")
   //-   button(type="submit") Что это?
   //- form( method="POST", action="/contacts")
   //-   button(type="submit") Обратная связь
-  a.button(href="/contacts") Обратная связь
+  a.button(href="/contacts")
+    span Обратная связь
   //- h1= title
   //- p Welcome to #{title}
   p Решение задач по:
   if (razdels!==undefined)
       each val, index in razdels
-        a.button(href="/solve?razd=#{val['ID']}")  #{val['Name']}
+        a.button(href="/solve?razd=#{val['ID']}")
+          span #{val['Name']}

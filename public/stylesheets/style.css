@@ -37,25 +37,96 @@ button:hover
 
 a.button
 {
-	display: block;
+	display: inline-table; 
+	vertical-align:middle; 
+	text-align:center;
 	width: 100%;
 	background-color: #00B7FF;
 	border: 1px solid #00B7FF;
 	cursor: pointer;
 	color: white;
 	min-height: 32px;
-	margin-top: 10px;
+	/*margin-top: 10px;*/
 	margin-bottom: 10px;
-	vertical-align: middle;
+	/*padding: 10px;*/
 	text-decoration: none;
-	text-align: center;
-	line-height: 32px;
+	/*line-height: 32px;*/
 }
 
 a.button:hover
 {
 	background-color: #5BD1FF;
 	border: 1px solid #5BD1FF;
+}
+
+a.can_find
+{
+	display: inline-table; 
+	vertical-align:middle; 
+	text-align:center;
+	width: 45%;
+	background-color: #8000FF;
+	border: 1px solid #8000FF;
+	cursor: pointer;
+	color: white;
+	min-height: 32px;
+	margin-left: 5px;
+	margin-bottom: 5px;
+	/*padding: 10px;*/
+	text-decoration: none;
+	/*line-height: 32px;*/
+}
+
+a.can_find:hover
+{
+	background-color: #A953FF;
+	border: 1px solid #A953FF;
+}
+
+a.to_find
+{
+	display: inline-table; 
+	vertical-align:middle; 
+	text-align:center;
+	width: 45%;
+	background-color: #05388D;
+	border: 1px solid #05388D;
+	cursor: pointer;
+	color: white;
+	min-height: 32px;
+	margin-left: 5px;
+	margin-bottom: 5px;
+	/*padding: 10px;*/
+	text-decoration: none;
+	/*line-height: 32px;*/
+}
+
+a.to_find:hover
+{
+	background-color: #2172F8;
+	border: 1px solid #2172F8;
+}
+
+a span{
+	display:table-cell;
+	vertical-align: middle;
+	min-height: 32px;
+}
+
+hr{
+	background-color: #7300E6;
+	color: #7300E6;
+	height: 0.1px;
+}
+
+.show-hide{
+	color: #00B7FF;
+	cursor: pointer;
+}
+.show-hide:hover
+{
+	color:#8CDFFF;
+	border-bottom: 1px dashed #8CDFFF;
 }
 
 .wrapper
