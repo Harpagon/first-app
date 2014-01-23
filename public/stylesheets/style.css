@@ -119,6 +119,35 @@ hr{
 	height: 0.1px;
 }
 
+ul
+{
+	margin: 0;
+	padding: 0;
+}
+
+.kv_to_add
+{
+	display: inline-block;
+	width: 100%;
+	min-height: 32px;
+	vertical-align: middle;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.kv_vlaue
+{
+	display: inline-block;
+	width: 20%;
+}
+
+.kv_name
+{
+	width: 70%;
+	display: inline-block;
+}
+
 .show-hide{
 	color: #00B7FF;
 	cursor: pointer;

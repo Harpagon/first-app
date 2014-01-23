@@ -2,34 +2,26 @@ extends layout
 
 block content
   h2 Поиск решения: #{title}
-  //- console.log("Hello");
-    //- a.button(href="mailto:harpagonzp@gmail.com", target="_blank") e-mail
-    //- a.button(href="http://vk.com/harpagon", target="_blank") VKontakte
-    //- a.button(href="http://facebook.com/harpagonzp", target="_blank") Facebook
-    //- a.button(href="http://twitter.com/harpagon1", target="_blank") twitter
-  //- form( method="POST", action="/")
-  p 
-    if (parent_razd.length>1)
-      - for (var i=0;i < parent_razd.length-1;i++)
-          a(href="/solve?razd=#{parent_razd[i]['ID']}") #{parent_razd[i]['Name']}
-          |&nbsp;\&nbsp;
+  if parent_razd.length > 0
+    p 
+      if (parent_razd.length>1)
+        - for (var i=0;i < parent_razd.length-1;i++)
+            a(href="/solve?razd=#{parent_razd[i]['ID']}") #{parent_razd[i]['Name']}
+            |&nbsp;\&nbsp;
+          | #{parent_razd[parent_razd.length-1]['Name']}
+      else
         | #{parent_razd[parent_razd.length-1]['Name']}
-    else
-      | #{parent_razd[parent_razd.length-1]['Name']}
-  hr
+    hr
   if (subrazdels!==undefined)
     each val, index in subrazdels
       a.button(href="/solve?razd=#{val['ID']}")
         span #{val['Name']}
-    if (parent_razd.length > 1)
-      br
-      a( href="/solve?razd=#{parent_razd[parent_razd.length-2]['ID']}" class="button separator")
-        span Назад
+    
   else
     - var ff_vars = "";
     p Искомые переменные:
     if find_vars !== undefined
-      - console.log("ID:"+find_vars);
+      //- console.log("ID:"+find_vars);
       each val, index in find_vars
         - ff_vars+= '&find_vars=' + val['ID'];
         //- var link = '<a class="to_find" href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}%href%"><span>#{val['Name']} (#{val['Description']})</span></a>';
@@ -46,6 +38,18 @@ block content
         each val, index in findable_vars
           a.can_find(href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}#{ff_vars}&find_vars=#{val['ID']}")
             span #{val['Name']} (#{val['Description']})
-   hr
+    hr
+    if (kv_to_add !== undefined)
+      - console.log("KV_TO_ADD: "+kv_to_add);
+      p Выберите известные переменные:
+      ul
+        each val, index in kv_to_add
+          li.kv_to_add
+            a.kv_name(href="http://") #{val['Name']+val['Description']}
+            input.kv_vlaue(type="text")
+  if (parent_razd.length > 1)
+      br
+      a( href="/solve?razd=#{parent_razd[parent_razd.length-2]['ID']}" class="button separator")
+        span Назад
   a( href="/" class=(lastSeparator||(parent_razd.length == 1))?'button separator':'button')
     span Вернуться на главную
