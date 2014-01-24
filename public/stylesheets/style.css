@@ -140,6 +140,11 @@ ul
 	text-align: center;
 }
 
+.kv_to_add:hover
+{
+	background-color: #A953FF;
+}
+
 .kv_value
 {
 	display: inline-table;

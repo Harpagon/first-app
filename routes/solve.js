@@ -52,23 +52,27 @@ exports.solve = function(req, res){
 							kv_to_add.push(rel_vars[j]);
 					}
 				}
-				try
+				if (req.query.know_vars !== undefined)
 				{
-					var k_v = req.query.know_vars;
-					var values = req.query.val;
-					var test =[[1,2],[1,3]];
-					for(var i in k_v)
+					try
 					{
-						k_v[i] = JSON.parse(k_v[i]);
-						if (k_v[i][0] === undefined || k_v[i][1] === undefined)
-							throw "Не все значения введены!";
-						know_vars.push({ID:k_v[i][0],Value:k_v[i][1]});
-						console.log("KNOW_VARS: "+know_vars[i]['ID']+":"+know_vars[i]['Value']);
+						var k_v = JSON.parse('['+req.query.know_vars.toString()+']');
+						console.log("KNOW VARS:"+k_v);
+						/*var values = req.query.val;
+						var test =[[1,2],[1,3]];*/
+						for(var i in k_v)
+						{
+							k_v[i] = JSON.parse(k_v[i]);
+							if (k_v[i][0] === undefined || k_v[i][1] === undefined)
+								throw "Не все значения введены!";
+							know_vars.push({ID:k_v[i][0],Value:k_v[i][1]});
+							console.log("KNOW_VARS: "+know_vars[i]['ID']+":"+know_vars[i]['Value']);
+						}
+						//console.log("")
+					}catch(ex)
+					{
+						res.render('error_page',{title:ex});
 					}
-					//console.log("")
-				}catch(ex)
-				{
-					res.render('error_page',{title:ex});
 				}
 				//console.log(know_vars.isArray());
 				if (know_vars !== undefined && know_vars.length > 0)
@@ -76,11 +80,12 @@ exports.solve = function(req, res){
 					console.log("KNOW_VARS: "+know_vars);
 					console.log("KNOW_VARS_FIRST: "+know_vars[0]);
 					console.log("KNOW_VARS_FIRST_ID: "+know_vars[0]['ID']);
-					res.render('solve',{title:"Решение найдено", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars});
+					res.render('solve',{title:"Решение найдено", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars,kv_to_add:kv_to_add,url:req.url});
 				}else
 				{
 					res.render('solve',{title:"Выбор известных переменных", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars,kv_to_add:kv_to_add,url:req.url});
 				}
+
 			}else
 			{
 				res.render('solve',{title:"Выбор искомых переменных", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars});
