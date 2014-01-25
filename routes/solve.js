@@ -80,7 +80,17 @@ exports.solve = function(req, res){
 					console.log("KNOW_VARS: "+know_vars);
 					console.log("KNOW_VARS_FIRST: "+know_vars[0]);
 					console.log("KNOW_VARS_FIRST_ID: "+know_vars[0]['ID']);
-					res.render('solve',{title:"Решение найдено", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars,kv_to_add:kv_to_add,url:req.url});
+					for(i in know_vars)
+					{
+						var v = know_vars[i]['Value'];
+						var r = formulas.getVariableById(know_vars[i]['ID'],parent['Variables']);
+						r['Value'] = v;
+						if (r!="NOT_FOUND")
+							know_vars[i] = r;
+						else
+							res.render('error_page',{title:"Переменная не найдена!"});
+					}
+					res.render('solve',{title:"Решение найдено", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars,kv_to_add:kv_to_add,url:req.url, know_vars: know_vars});
 				}else
 				{
 					res.render('solve',{title:"Выбор известных переменных", lastSeparator:false,parent_razd:razdels.getPathById(razd),findable_vars:findable_vars,find_vars:ffvars,kv_to_add:kv_to_add,url:req.url});
