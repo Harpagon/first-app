@@ -262,3 +262,4 @@ function Main (input,out) {
 	out.innerText += p.EvaluatePostfix();/**/
 }
 
+exports.Parser = Parser;

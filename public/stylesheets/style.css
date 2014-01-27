@@ -184,8 +184,8 @@ ul
 	min-height: 32px;
 	vertical-align: middle;
 	list-style: none;
-	margin: 0;
-	padding: 0;
+	/*margin: 0;
+	padding: 0;*/
 	
 	background-color: #05388D;
 	margin-bottom: 5px;
@@ -209,7 +209,7 @@ ul
 	clear: left;
 	color:white;
 	text-decoration: none;
-	margin-right: 5px;
+	margin-left: 5px;
 }
 
 .know_value .kv_value
@@ -231,6 +231,65 @@ ul
 	width: 100%;
 }
 
+.controls
+{
+	display: inline-block;
+	text-align: right;
+	position: relative;
+	width: 65%;
+}
+
+.change, .delete
+{
+	width: 10%;
+	display: inline-table;
+	position: relative;
+	vertical-align: middle;
+	text-align: right;
+	min-height: 32px;
+	/*clear: left;*/
+	color:white;
+	text-decoration: none;
+	margin-left: 5px;
+}
+
+.change:hover
+{
+	background-color: #428703;
+}
+
+.delete:hover
+{
+	background-color: #A40004;
+}
+
+.know_value a span
+{
+	display:table-cell;
+	vertical-align: middle;
+	min-height: 32px;
+	text-align: right;
+}
+
+.solvetion
+{
+	/*margin: 5px;*/
+	background-color: #D6C47A;
+	color: black;
+}
+
+.solvetion p
+{
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.solv
+{
+	margin: 0;
+	line-height: auto;
+}
+
 .show-hide{
 	color: #00B7FF;
 	cursor: pointer;
@@ -248,7 +307,7 @@ ul
 	margin: auto auto;
 	display: block;
 	max-width: 400px;
-	min-width: 100px;
+	min-width: 200px;
 	width: 25%;
 	vertical-align: middle;
 }
