@@ -43,14 +43,23 @@ block content
     if (know_vars !== undefined)
       ul
           each val, index in know_vars
-            li.know_value
-              a.kv_name(href="#{url}" onclick!="this.href += vval#{index}.value!==''?'&know_vars=%22[#{val['ID']},'+vval#{index}.value+']%22':'';" )
+            li.know_value(title="#{val['Description']}")
+              a.kv_name(href="#")
                 span #{val['Name']}
                   sub #{val['Index']}
                   | &nbsp;=&nbsp;
               div.kv_value
-                input(type="text" id="vval#{index}" value="#{val['Value']}")
-                - console.log(val['Value']);
+                input(type="text" id="kvval#{index}" value="#{val['Value']}")
+              div.controls
+                - var href = "";
+                  each v2, ind2 in know_vars
+                    if ((v2['ID']!=val['ID']) || (v2['Index']!=val['Index']))
+                      - href+= '&know_vars=%22['+ v2['ID']+','+v2['Value']+']%22';
+                a.change(href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}#{ff_vars}#{href}" onclick!="this.href += kvval#{index}.value!==''?'&know_vars=%22[#{val['ID']},'+kvval#{index}.value+']%22':'';")
+                  span Изменить
+                a.delete(href="/solve?razd=#{parent_razd[parent_razd.length-1]['ID']}#{ff_vars}#{href}")
+                  span Удалить
+                //- console.log(val['Value']);
     if (kv_to_add !== undefined)
       p
         span.show-hide(onclick="show_hide_add_know();") Добавить:
@@ -62,7 +71,13 @@ block content
                 span #{val['Name']+' ('+val['Description']+')'}
               div.kv_value
                 input(type="text" id="vval#{index}")
-            
+    if (solvetion !== undefined)
+      hr
+      p Решение:
+      div.solvetion
+        each val in solvetion
+          p.solv!= val
+          -console.log(val)
   if (parent_razd.length > 1)
       br
       a( href="/solve?razd=#{parent_razd[parent_razd.length-2]['ID']}" class="button separator")

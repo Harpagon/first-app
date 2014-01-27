@@ -46,7 +46,7 @@ function ParseFormulas(formulasStr) {
 				{
 					f.Variables.push(JSON.parse(JSON.stringify(vars[i])));
 					//var v = ;
-					if (vArray.length > 2)
+					if (vArray[vA].length > 2)
 						if (vArray[vA][2] !== null && vArray[vA][2] !== "" && vArray[vA][2]!== undefined)
 							f.Variables[f.Variables.length-1].Index = parseInt(vArray[vA][2],10);
 					//break;
@@ -165,8 +165,156 @@ function getVariableById(id, Formulas) {
 	return "NOT_FOUND";
 }
 
+function GetConstants (Formulas) {
+	var vars = [];
+	var v;
+	for (var i = 0; i < Formulas.length; i++) {
+		if (!isContainUUID(vars,Formulas[i].Goal.ID))
+		{
+			v = JSON.parse(JSON.stringify(Formulas[i].Goal));
+			if (v.Value !== "" && v.Value!== null && v.Value!== undefined)
+				vars.push(v);
+		}
+		for (var j = 0; j < Formulas[i].Variables.length; j++) {
+			if (!isContainUUID(vars,Formulas[i].Variables[j].ID))
+			{
+				v = JSON.parse(JSON.stringify(Formulas[i].Variables[j]));
+				if (v.Value !== "" && v.Value!== null && v.Value!== undefined)
+					vars.push(v);
+			}
+		}
+	}
+	return vars;
+}
+
+function Solve(goal, know, Formulas) {
+	var g_result = [];
+	var need_more = [];
+	var goals = [];
+	for (var k = 0; k < Formulas.length; k++)
+	{
+		if (Formulas[k].Goal.ID == goal.ID)
+		{
+			var g = Formulas[k];
+			goals.push(Formulas[i]);
+			var result = [];
+			for (var i = 0; i < g.Variables.length; i++) {
+				var nm = FindFormulas(g.Variables[i],know,Formulas);
+				if (nm!=="")
+				{
+					while(nm.length>0)
+					{
+						var n = nm.pop();
+						need_more.push(n);
+						know.push(n.Goal);
+					}
+				}
+				if (isContainAllVar(g,know))
+					break;
+			}
+			if (isContainAllVar(g,know)) {
+				while(need_more.length >0) {
+					result.push(need_more.pop());
+				}
+				result.push(g);
+				g_result.push(result);
+			}
+		}
+	}
+	return g_result;
+}
+
+//Поиск формулы по целевой и известным переменным
+function FindFormulas(f_find, know, Formulas) {
+	var need_more = [];
+	var g = FindGoal(f_find, Formulas);
+	if (g !== "")
+	{
+		/*while(!isContainAllVar(g,know))
+		{
+
+		}*/
+		var result = [];
+		
+		
+		for (var i = 0; i < g.Variables.length; i++) {
+			var nm = FindFormulas(g.Variables[i],know, Formulas);
+			if (nm!=="")
+			{
+				while(nm.length>0)
+				{
+					var n = nm.pop();
+					need_more.push(n);
+					know.push(n.Goal);
+				}
+			}
+			if (isContainAllVar(g,know))
+				break;
+		}
+		if (isContainAllVar(g,know)) {
+			while(need_more.length >0) {
+				result.push(need_more.pop());
+			}
+			result.push(g);
+			return result;
+		}else
+		{
+			return "";
+		}
+	}else
+	{
+		return "";
+	}
+
+}
+
+//Проверка, содержит ли формула все переменные из списка
+function isContainAllVar(formula,vars) {
+	var all_good = true;
+	for (var i = 0; i < formula.Variables.length; i++) {
+		var good = false;
+		for (var j = 0; j < vars.length; j++) {
+			if (formula.Variables[i].ID == vars[j].ID)
+			{
+				if (formula.Variables[i].Index !== "" && formula.Variables[i].Index !== null && formula.Variables[i].Index !== undefined)
+				{
+					if (vars[j].Index !== "" && vars[j].Index !== null && vars[j].Index !== undefined)
+					{
+						if (formula.Variables[i].Index == vars[j].Index)
+						{
+							good = true;
+							break;
+						}
+					}
+				}else
+				{
+					if (vars[j].Index === "" || vars[j].Index === null || vars[j].Index === undefined)
+					{
+						good = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!good)
+			all_good = false;
+
+	}
+	return all_good;
+}
+
+function FindGoal (f, Formulas) {
+	for (var i = 0; i < Formulas.length; i++) {
+		if (Formulas[i].Goal.ID == f.ID)
+			return Formulas[i];
+	}
+	return "";
+}
+
 exports.ParseFormulas = ParseFormulas;
 exports.GetFindableVars = GetFindableVars;
 exports.isContainUUID = isContainUUID;
 exports.GetRelatedVars = GetRelatedVars;
 exports.getVariableById = getVariableById;
+exports.GetConstants = GetConstants;
+exports.Solve = Solve;
