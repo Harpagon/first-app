@@ -142,6 +142,29 @@ function GetRelatedVars (goal_var, Formulas) {
 	return vars;
 }
 
+function getVariableByName(id, Formulas) {
+	var vars = [];
+	for (var i = 0; i < Formulas.length; i++) {
+		if (!isContainUUID(vars,Formulas[i].Goal.ID))
+		{
+			vars.push(Formulas[i].Goal);
+		}
+		for (var j = 0; j < Formulas[i].Variables.length; j++) {
+			if (!isContainUUID(vars,Formulas[i].Variables[j].ID))
+			{
+				vars.push(Formulas[i].Variables[j]);
+			}
+		}
+	}
+	//return vars;
+	for (i in vars)
+	{
+		if (vars[i].Name == id)
+			return vars[i];
+	}
+	return "NOT_FOUND";
+}
+
 function getVariableById(id, Formulas) {
 	var vars = [];
 	for (var i = 0; i < Formulas.length; i++) {
@@ -316,5 +339,6 @@ exports.GetFindableVars = GetFindableVars;
 exports.isContainUUID = isContainUUID;
 exports.GetRelatedVars = GetRelatedVars;
 exports.getVariableById = getVariableById;
+exports.getVariableByName = getVariableByName;
 exports.GetConstants = GetConstants;
 exports.Solve = Solve;

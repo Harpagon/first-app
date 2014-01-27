@@ -6,6 +6,7 @@
 var express = require('express');
 var routes = require('./routes');
 var solver = require('./routes/solve');
+var ptext = require('./routes/text');
 var user = require('./routes/user');
 var addtofind = require('./routes/add_to_find');
 var http = require('http');
@@ -42,6 +43,7 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.bodyParser());
 
 // development only
 if ('development' == app.get('env')) {
@@ -55,6 +57,8 @@ app.get('/contacts', routes.contacts);
 app.get('/add_to_find', addtofind.add_to_find);
 app.get('/users', user.list);
 app.get('/solve', solver.solve);
+app.get('/text', ptext.ptext);
+app.post('/text', ptext.ptext);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

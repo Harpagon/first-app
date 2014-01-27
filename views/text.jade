@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h2 Введите известные и искомые переменные:
+  form(id="find", method="post", action="/text")
+    select(id="razd" name="razd")
+        each i in razdels
+            option(value="#{i['ID']}") #{i['Name']}
+    br
+    textarea(id="parseText" name="parseText" style="width:100%;" rows="15")
+    br
+    button(type="submit") Решить
