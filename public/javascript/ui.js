@@ -90,3 +90,14 @@ function AddToText(p) {
 	parseText.selectionEnd = ss+sel;
 	parseText.focus();
 }
+
+var example = true;
+
+function HideExample(ta) {
+	if (example)
+	{
+		ta.value = "";
+		example = false;
+		ta.style.color = 'black';
+	}
+}

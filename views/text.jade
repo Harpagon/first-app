@@ -13,7 +13,9 @@ block content
         span.show-hide(onclick="show_hide_addVars();") Доступные переменные:
     div.addVars#addVars
     br
-    textarea(id="parseText" name="parseText" style="width:100%;" rows="15")
+    textarea(id="parseText" name="parseText" style="width:100%;" rows="15" onfocus="HideExample(this);")
+        | Пример:
+        | a = 10; a = 10; a = 10; S = ?;
     br
     button(type="submit") Решить
     a( href="/" class='button separator')

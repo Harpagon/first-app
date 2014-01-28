@@ -118,7 +118,7 @@ RegExp.prototype.execAll = function(string) {
 
 exports.ptext = function(req, res)
 {
-	if (req.body.parseText !== null && req.body.parseText !== "" && req.body.parseText !== undefined)
+	if (req.body.parseText !== null && req.body.parseText !== "" && req.body.parseText !== undefined && req.body.razd !== undefined && req.body.razd !== null && req.body.razd !== "")
 	{
 		var text_orig = req.body.parseText;
 		var spaces = / /gim;
