@@ -19,6 +19,7 @@ var app = express();
 
 
 GLOBAL.razdels = razd.GetRazdels();//[];//razd.GetRazdels();//[{id:'id1',name:'name1'},{id:'id2',name:'name2'}];
+console.log('Разделы загружены...'+GLOBAL.razdels);
 
 /*function load(argument) {
 	//console.log("wait...");
