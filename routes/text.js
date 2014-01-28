@@ -131,7 +131,7 @@ exports.ptext = function(req, res)
 		for(var i in m)
 		{
 			var r = formulas.getVariableByName(m[i][2], razdel['Variables']);
-			console.log("var: "+m[i][2]+"; value: "+m[i][3]);
+			//console.log("var: "+m[i][2]+"; value: "+m[i][3]);
 
 			if (m[i][3] == "?")
 			{
@@ -168,7 +168,7 @@ exports.getvars = function(req, res)
 			var vars = formulas.GetAllVariables(parent['Variables']);
 			if (vars.length > 0)
 			{
-				//console.log(vars);
+				////console.log(vars);
 				respText = "";
 				for(var i in vars)
 				{

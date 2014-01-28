@@ -21,16 +21,16 @@ var app = express();
 GLOBAL.razdels = razd.GetRazdels();//[];//razd.GetRazdels();//[{id:'id1',name:'name1'},{id:'id2',name:'name2'}];
 
 /*function load(argument) {
-	console.log("wait...");
+	//console.log("wait...");
 	setTimeout(function() {
 		GLOBAL.razdels = razd.GetRazdels();
-		console.log("wait done!");
+		//console.log("wait done!");
 	}, 10000);
 
 }
 
 load();*/
-//console.log(GLOBAL.razdels);
+////console.log(GLOBAL.razdels);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -62,5 +62,5 @@ app.get('/getvars', ptext.getvars);
 app.post('/text', ptext.ptext);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  //console.log('Express server listening on port ' + app.get('port'));
 });

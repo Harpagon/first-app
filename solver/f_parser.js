@@ -53,7 +53,7 @@ function ParseFormulas(formulasStr) {
 				}
 			}
 		}
-		//console.log(f);
+		////console.log(f);
 		Formulas.push(f);
 	}
 	return Formulas;
@@ -114,7 +114,7 @@ function GetFindableVars (Formulas) {
 }
 
 function GetRelatedVars (goal_var, Formulas) {
-	console.log("GET RELATED VARS FOR '"+goal_var+"' IN "+Formulas);
+	//console.log("GET RELATED VARS FOR '"+goal_var+"' IN "+Formulas);
 	var vars = [];
 	for (var i = 0; i < Formulas.length; i++)
 	{
