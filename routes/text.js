@@ -124,6 +124,7 @@ exports.ptext = function(req, res)
 		var spaces = / /gim;
 		var variable = /((.*) ?\= ?(.*);)/gim;
 		var text = text_orig.replace(spaces,"");
+		text = text.replace(/;/gim,";\r\n");
 		var m = variable.execAll(text);
 		var url = "/solve?razd="+req.body.razd;
 		var razdel = razdels.getRazdelById(req.body.razd);
@@ -131,6 +132,7 @@ exports.ptext = function(req, res)
 		{
 			var r = formulas.getVariableByName(m[i][2], razdel['Variables']);
 			console.log("var: "+m[i][2]+"; value: "+m[i][3]);
+
 			if (m[i][3] == "?")
 			{
 				
@@ -150,6 +152,37 @@ exports.ptext = function(req, res)
 		res.redirect(url);
 	}else
 	{
-		res.render('text',{razdels:GLOBAL.razdels});
+		res.render('text',{razdels:razdels.getAllRazdels()});
 	}
+};
+
+exports.getvars = function(req, res)
+{
+	var respText = "Нет переменных для этого раздела.";
+	var razd_id = req.query.razd;
+	if (razd_id!==undefined)
+	{
+		var parent = razdels.getRazdelById(razd_id);
+		if (parent!="NOT_FOUND")
+		{
+			var vars = formulas.GetAllVariables(parent['Variables']);
+			if (vars.length > 0)
+			{
+				//console.log(vars);
+				respText = "";
+				for(var i in vars)
+				{
+					
+					respText += "<p onclick='AddToText(this);' title='Щелкните, чтобы добавить переменую в условие'>"+vars[i]['Name']+" ("+vars[i]['Description']+")</p>";
+				}
+				
+			}
+		}
+	}else
+	{
+		res.send("");
+		res.end();
+	}
+	res.send(respText);
+	res.end();
 };

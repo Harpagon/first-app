@@ -334,6 +334,24 @@ function FindGoal (f, Formulas) {
 	return "";
 }
 
+//Извлекает все уникальные переменные из всех формул
+function GetAllVariables(Formulas) {
+	var vars = [];
+	for (var i = 0; i < Formulas.length; i++) {
+		if (!isContainUUID(vars,Formulas[i].Goal.ID))
+		{
+			vars.push(Formulas[i].Goal);
+		}
+		for (var j = 0; j < Formulas[i].Variables.length; j++) {
+			if (!isContainUUID(vars,Formulas[i].Variables[j].ID))
+			{
+				vars.push(Formulas[i].Variables[j]);
+			}
+		}
+	}
+	return vars;
+}
+
 exports.ParseFormulas = ParseFormulas;
 exports.GetFindableVars = GetFindableVars;
 exports.isContainUUID = isContainUUID;
@@ -342,3 +360,4 @@ exports.getVariableById = getVariableById;
 exports.getVariableByName = getVariableByName;
 exports.GetConstants = GetConstants;
 exports.Solve = Solve;
+exports.GetAllVariables = GetAllVariables;

@@ -284,6 +284,37 @@ ul
 	margin-right: 5px;
 }
 
+.addVars p
+{
+	margin-bottom: 0;
+	margin-top: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+.addVars p:hover
+{
+	color: #CA5109;
+}
+
+p select
+{
+	display: inline-block;
+	right: 0;
+	position: relative;
+	border: 1px solid #00B7FF;
+	width:100%;
+	background-color: #CAF0FF;
+	/*text-align: right;*/
+}
+
+textarea{
+	border: 1px solid #00B7FF;
+	background-color: #CAF0FF;
+	resize: vertical;
+}
+
 .solv
 {
 	margin: 0;

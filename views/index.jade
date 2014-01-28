@@ -13,11 +13,14 @@ block content
     span Обратная связь
   br
   br
+  p Вы можете воспользоваться текстовым вводом:
+    | (предпочтительней для мобильных устройств)
   a.button(href="/text")
     span Ввод в текстовом виде
   //- h1= title
   //- p Welcome to #{title}
-  p Решение задач по:
+
+  p Либо пошаговым конструктором:
   if (razdels!==undefined)
       each val, index in razdels
         a.button(href="/solve?razd=#{val['ID']}")

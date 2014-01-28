@@ -76,6 +76,28 @@ function getRazdelById(id,dirs) {
 
 }
 
+function getAllRazdels(dirs) {
+	var result = [];
+	if (dirs === undefined)
+		dirs = GLOBAL.razdels;
+	for(var i in dirs)
+	{
+		if (dirs[i]['isDirectory'])
+		{
+			//console.log("ENTER TO SUB DIR: "+dirs[i]['ID']+":"+dirs[i]['Name']);
+			var r = getAllRazdels(dirs[i]['Dirs']);
+			for(var j in r)
+				result.push(r[j]);
+
+		}else
+		{
+			result.push(dirs[i]);
+		}
+	}
+	//console.log("NOT_FOUND_BY_ID");
+	return result;
+}
+
 function getParentById(id,dirs,parent) {
 	if (dirs === undefined)
 	{
@@ -159,3 +181,4 @@ exports.GetRazdels = GetRazdels;
 exports.getRazdelById = getRazdelById;
 exports.getParentById = getParentById;
 exports.getPathById = getPathById;
+exports.getAllRazdels = getAllRazdels;

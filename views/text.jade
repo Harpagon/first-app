@@ -3,10 +3,18 @@ extends layout
 block content
   h2 Введите известные и искомые переменные:
   form(id="find", method="post", action="/text")
-    select(id="razd" name="razd")
-        each i in razdels
-            option(value="#{i['ID']}") #{i['Name']}
+    p Раздел:
+        select(id="razd" name="razd" onchange="GetVariables(razd.options[razd.selectedIndex].value);")
+            option(value="") -- Выберите раздел --
+            each i in razdels
+                //- console.log(i);
+                option(value="#{i['ID']}") #{i['Name']}
+    p
+        span.show-hide(onclick="show_hide_addVars();") Доступные переменные:
+    div.addVars#addVars
     br
     textarea(id="parseText" name="parseText" style="width:100%;" rows="15")
     br
     button(type="submit") Решить
+    a( href="/" class='button separator')
+        span Вернуться на главную

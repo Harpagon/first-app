@@ -58,6 +58,7 @@ app.get('/add_to_find', addtofind.add_to_find);
 app.get('/users', user.list);
 app.get('/solve', solver.solve);
 app.get('/text', ptext.ptext);
+app.get('/getvars', ptext.getvars);
 app.post('/text', ptext.ptext);
 
 http.createServer(app).listen(app.get('port'), function(){
