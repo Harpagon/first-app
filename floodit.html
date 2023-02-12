@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>FloodIt</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<style>
+		#field{
+			width:100%;
+			height:100%;
+		}
+		.tile{
+			/*float:left;*/
+			width:8%;
+			height:8%;
+			display:inline-block;
+			margin: 1px;
+			cursor: pointer;
+			border-radius: 2px;
+		}
+		.tile:hover{
+			width:8%;
+			height: 8%;
+			border: 1px solid #2853B2;
+			margin: 0;
+		}
+		.row{
+			width: 100%;
+			height: 7%;
+			display: block;
+		}
+		#title{
+			height: 40px;
+			width: 100%;
+			vertical-align: middle;
+			border: 1px solid gray;
+			border-radius: 4px;
+			padding-top: 10px;
+		}
+		.scores{
+			display: inline-block;
+			margin-right: 20px;
+			margin-left: 20px;
+		}
+		.steps{
+			display: inline-block;
+			margin-right: 20px;
+
+		}
+		.restart{
+			display: inline-block;
+			cursor: pointer;
+			border: 1px solid gray;
+			border-radius: 2px;
+			padding: 2px;
+			right: 0px;
+		}
+		.restart:hover{
+			background-color: gray;
+		}
+		#dialog {
+			display: block;
+			width: 100%;
+			height: 25%;
+			position: absolute;
+			top: 50%;
+			background-color: white;
+			border: 1px solid gray;
+			border-radius: 3px;
+			text-align: center;
+			line-height: 75px;
+			font-size: xx-large;
+			z-index: 100;
+		}
+		#dialog button{
+			display: block;
+			left: 49%;
+			position: relative;
+			height: 25px;
+			
+			line-height:12px;
+			cursor: pointer;
+			border: 1px solid gray;
+			border-radius: 2px;
+		}
+		#dialog button:hover{
+			background-color: gray;
+		}
+		#gray{
+			z-index: 99;
+			background-color: #3C3C3C;
+			background-color: rgba(60,60,60,0.5);
+
+			margin: 0 auto;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0px;
+		}
+		#scores{
+			font-size: x-large;
+			color: darkslateblue;
+		}
+		#steps{
+			font-size: x-large;
+			color: darkslateblue;
+		}
+		.panel{
+			height: 20%;
+			display: block;
+			position:absolute;
+			align-content: center;
+			align-items: center;
+			align-self: center;
+			margin-top: 5px;
+		}
+		.button{
+			width: 16%;
+			height: 16%;
+			display: inline-block;
+			border-radius: 2px;
+ 			margin: 1px; 
+			 cursor: pointer;
+		}
+	</style>
+	<script src="https://telegram.org/js/games.js"></script>
+</head>
+<body style="width:99%;height: 99%; position: absolute;margin:0;padding:0;">
+<div id="guard" class="guard" style='-moz-user-select: none; -webkit-user-select: none; -ms-user-select:none; user-select:none; padding:0; margin: 0 auto;height: 100%;width:100%;position:absolute' 
+ unselectable='on'
+ onselectstart='return false;'>
+	<div id="title" >
+		<div class="scores">Очки: <span id="scores">0</span></div>
+		<div class="steps">Ходы: <span id="steps">25</span></div>
+		<div class="restart" onclick="start_level();">🔀</div>
+	</div>
+	<div id="field"></div>
+</div>
+	<script>
+		
+		var field = [];
+		var steps = 25;
+		var scores = 0;
+		var field_size = 14;
+		init();
+
+		start_level();
+		function init() {
+			var screenW = document.body.clientWidth;//window.screen.width;
+			var screenH = document.body.clientHeight-36;//window.screen.height-36;
+			var minSize = 0;
+			if (screenW >= screenH){
+				minSize = screenH-36;
+			}else{
+				minSize = screenW;
+				var panel = document.createElement('DIV');
+				panel.className = "panel";
+				for (var i=0;i<5;i++){
+				var div = document.createElement('DIV'); 
+					div.className = 'button'; 
+					div.value = i; 
+					switch (i) { 
+						case 0:
+							div.style.backgroundColor = '#FF5959'; 
+							break; 
+						case 1: 
+							div.style.backgroundColor = '#63BB29'; 
+							break; 
+						case 2: 
+							div.style.backgroundColor = '#2999D3'; 
+						break; 
+						case 3: 
+							div.style.backgroundColor = '#FF8636'; 
+						break; 
+						case 4: 
+							div.style.backgroundColor = '#974BC7';
+						break; 
+					}
+ 					div.onclick = step;
+					panel.appendChild(div);
+				}
+ 				document.styleSheets[0].cssRules[15].style.height = ((screenW / 5.5)+4).toString()+'px';
+ 				document.styleSheets[0].cssRules[15].style.top = (minSize + 45).toString()+'px';
+ 				document.styleSheets[0].cssRules[16].style.width = (screenW / 5.5).toString()+'px';
+ 				document.styleSheets[0].cssRules[16].style.height = (screenW / 5.5).toString()+'px';
+				document.body.appendChild(panel);
+			}
+			//document.styleSheets.item['field'] = 'lol';
+			/*var g = document.getElementById('guard');
+			g.style.height = (screenH-20).toString()+'px';
+			g.style.width = (screenW-20).toString()+'px';*/
+
+			//.title;
+			document.styleSheets[0].cssRules[4].style.width = (screenW-1).toString()+'px';
+			//#field
+			document.styleSheets[0].cssRules[0].style.width = minSize.toString()+'px';
+			document.styleSheets[0].cssRules[0].style.height = minSize.toString()+'px';
+			document.styleSheets[0].cssRules[0].style.left = 2+'px';//((screenW / 2)-((minSize-36)/2)).toString()+'px';
+			document.styleSheets[0].cssRules[0].style.position = 'absolute';
+			//row
+			document.styleSheets[0].cssRules[1].style.width = (minSize).toString()+'px';
+			document.styleSheets[0].cssRules[1].style.height = (Math.ceil(minSize-36 / (field_size))).toString()+'px';
+			//tile
+			document.styleSheets[0].cssRules[1].style.width = (Math.ceil(minSize / (field_size+2))).toString()+'px';
+			document.styleSheets[0].cssRules[1].style.height = (Math.ceil(minSize / (field_size+2))).toString()+'px';
+			//tile:hover
+			document.styleSheets[0].cssRules[2].style.width = (Math.ceil(minSize / (field_size+2))).toString()+'px';
+			document.styleSheets[0].cssRules[2].style.height = (Math.ceil(minSize / (field_size+2))).toString()+'px';
+		}
+
+		window.addEventListener('resize', init);
+
+		function start_level() {
+			for (var i = 0; i < field_size; i++) {
+				var arr = [];
+				for (var j = 0; j < field_size; j++) {
+					arr[j] = Math.floor(Math.random() * (5 - 0) + 0 );
+				};
+				field[i] = arr;
+			}
+			steps = 25;
+			draw();
+		}
+		
+
+		function step () {
+			if (steps > 0)
+			{
+				var num = this.value;
+				//alert(num);
+				var first = field[0][0];
+				//alert(first);
+				if (num !== first)
+				{
+					search(0,0,first,num);
+					var filed = check();
+					
+					//alert(filed);
+					if (filed == 196)
+					{
+						scores += 3000 + (steps *1000);
+						draw();
+						//alert('Уровень пройден!');
+						displayDialog('Уровень пройден!', 'Далее');
+						start_level();
+						steps++;
+					}
+					steps = steps - 1;
+					draw();
+				}
+			}
+			else
+			{
+				//alert('Игра окончена!')
+				displayDialog('Уровень не пройден!', 'Начать заново');
+				try
+				{
+					var url = new URL(location.href); 
+					var playerid = url.searchParams.get("id");
+					var xmlhttp = new XMLHttpRequest(); 
+					var url = "/highscore/" + scores + "?id=" + playerid; 
+					xmlhttp.open("GET",url, true); 
+					xmlhttp.send();
+				}catch(e)
+				{
+					displayDialog(e.message,'OK');
+				}
+				scores = 0;
+				start_level();
+			}
+		}
+
+		window.onerror = function myErrorHandler(errorMsg, url, lineNumber, colNumber, err) {
+			displayDialog(errorMsg+"\n" + err.message,'OK');
+		};
+
+		function check () {
+			var c = field[0][0];
+			var cc = 0;
+			for (var i = 0; i < field_size; i++) {
+				for (var j = 0; j < field_size; j++) {
+					if (field[i][j] == c)
+						cc++;
+				}
+			}
+			return cc;
+		}
+
+		function draw () {
+			var f = document.getElementById('field');
+			f.innerHTML = '';
+			for (var i = 0; i < field_size; i++) {
+				var row = document.createElement('DIV');
+				row.className = 'row';
+				var f = document.getElementById('field');
+
+				for (var j = 0; j < field_size; j++) {
+					var div = document.createElement('DIV');
+					div.className = 'tile';
+					div.value = field[i][j];
+					switch (field[i][j])
+					{
+						case 0: div.style.backgroundColor = '#FF5959';
+						break;
+						case 1: div.style.backgroundColor = '#63BB29';
+						break;
+						case 2: div.style.backgroundColor = '#2999D3';
+						break;
+						case 3: div.style.backgroundColor = '#FF8636';
+						break;
+						case 4: div.style.backgroundColor = '#974BC7';
+						break;
+					}
+					div.onclick = step;
+					row.appendChild(div);
+				};
+				f.appendChild(row);
+			};
+			var sc = document.getElementById('scores');
+			sc.textContent = scores;
+			sc.innerText = scores;
+			var st = document.getElementById('steps');
+			st.textContent = steps;
+			st.innerText = steps;
+		}
+
+		function search(i,j, oldColor, newColor) {
+			var all = 0;
+			if (field[i][j] == oldColor)
+			{
+				field[i][j] = newColor;
+				all = 1;
+				//draw();
+			}else
+			{
+				return 0;
+			}
+			if (i>0)
+			{
+				all += search(i-1,j, oldColor, newColor);
+			}
+			if (j>0)
+			{
+				all += search(i,j-1, oldColor, newColor);
+			}
+			if (i<field_size-1)
+			{
+				all += search(i+1,j,oldColor, newColor);
+			}
+			if (j<field_size-1)
+			{
+				all += search(i,j+1, oldColor, newColor);
+			}
+			return all;
+		}	
+
+		function displayDialog(msg, buttontext)
+		{
+			
+			var dialog = document.createElement('DIV');
+			dialog.className = 'dialog';
+			dialog.id = 'dialog';
+			dialog.textContent = msg;
+			dialog.innerText = msg;
+			var btn = document.createElement('BUTTON');
+			btn.innerText = buttontext;
+			btn.textContent = buttontext;
+			btn.onclick = closeDialog;
+			dialog.appendChild(btn);
+			document.body.appendChild(dialog);
+			var guard = document.getElementById('guard');
+			var gray = document.createElement('div');
+			gray.id = 'gray';
+			guard.appendChild(gray);
+		}
+
+		function closeDialog()
+		{
+			var dialog = document.getElementById('dialog');
+			//var body = document.getElementsByTagName('body');
+			var guard = document.getElementById('guard');
+			var gray = document.getElementById('gray');
+			guard.removeChild(gray);
+			document.body.removeChild(dialog);
+		}
+
+
+	</script>
+	<script>
+		// document.addEventListener('DOMContentLoaded', function () {
+		// 	document.getElementsByClassName('cbalink')[0].remove();
+		// });
+	</script>
+</body>
+</html>
